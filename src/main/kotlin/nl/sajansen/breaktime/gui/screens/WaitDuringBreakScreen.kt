@@ -26,7 +26,7 @@ class WaitDuringBreakScreen : JPanel() {
         add(JLabel("Take a break"))
         add(countDownLabel)
 
-        JButton("Done").also {
+        JButton("Skip").also {
             it.addActionListener { MainControl.endBreak() }
             add(it)
         }

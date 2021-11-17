@@ -8,12 +8,15 @@ import nl.sajansen.breaktime.events.GuiEventListener
 import nl.sajansen.breaktime.utils.gui.loadImageResource
 import nl.sajansen.breaktime.utils.gui.setFullscreen
 import org.slf4j.LoggerFactory
+import java.util.*
 import javax.swing.JFrame
 import javax.swing.JOptionPane
 
 
 class MainFrame : JFrame(), GuiEventListener {
     private val logger = LoggerFactory.getLogger(MainFrame::class.java.name)
+
+    private var autoFocusTimer: Timer? = null
 
     companion object {
         private var instance: MainFrame? = null
@@ -61,6 +64,12 @@ class MainFrame : JFrame(), GuiEventListener {
         isAlwaysOnTop = value
         defaultCloseOperation = if (value) DO_NOTHING_ON_CLOSE else EXIT_ON_CLOSE
         extendedState = if (value) NORMAL else ICONIFIED
+
+        autoFocusTimer?.cancel()
+        autoFocusTimer?.purge()
+        if (value) {
+            autoFocusTimer = ControlUtils.setAutoFocusser(this)
+        }
 
         if (!setFullscreen(value)) {
             JOptionPane.showMessageDialog(
