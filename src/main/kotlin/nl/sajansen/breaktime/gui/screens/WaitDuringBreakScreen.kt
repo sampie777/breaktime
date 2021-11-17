@@ -3,6 +3,7 @@ package nl.sajansen.breaktime.gui.screens
 import nl.sajansen.breaktime.buttonBackgroundColor
 import nl.sajansen.breaktime.control.ControlUtils
 import nl.sajansen.breaktime.control.MainControl
+import nl.sajansen.breaktime.defaultFont
 import nl.sajansen.breaktime.textColor
 import org.slf4j.LoggerFactory
 import java.awt.Dimension
@@ -28,7 +29,7 @@ class WaitDuringBreakScreen : JPanel() {
         background = null
 
         val clockFont = Font("Courier", Font.PLAIN, 120)
-        val textFont = Font("Dialog", Font.PLAIN, 24)
+        val textFont = defaultFont.deriveFont(32f)
 
         val clockPanel = JPanel().also {
             it.maximumSize = Dimension(9999, 0)
@@ -45,10 +46,11 @@ class WaitDuringBreakScreen : JPanel() {
         clockPanel.add(countDownLabel)
 
         JButton("Skip").also {
-            it.addActionListener { MainControl.endBreak() }
             it.font = textFont
+            it.preferredSize = Dimension(200, 50)
             it.foreground = textColor
             it.background = buttonBackgroundColor
+            it.addActionListener { MainControl.endBreak() }
             actionPanel.add(it)
         }
 

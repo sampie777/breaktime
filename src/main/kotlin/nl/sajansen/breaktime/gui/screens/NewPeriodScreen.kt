@@ -3,11 +3,11 @@ package nl.sajansen.breaktime.gui.screens
 import nl.sajansen.breaktime.buttonBackgroundColor
 import nl.sajansen.breaktime.control.ControlUtils
 import nl.sajansen.breaktime.control.MainControl
+import nl.sajansen.breaktime.defaultFont
 import nl.sajansen.breaktime.textColor
 import org.slf4j.LoggerFactory
 import java.awt.Color
 import java.awt.Dimension
-import java.awt.Font
 import javax.swing.*
 
 class NewPeriodScreen : JPanel() {
@@ -24,10 +24,10 @@ class NewPeriodScreen : JPanel() {
         layout = BoxLayout(this, BoxLayout.Y_AXIS)
         background = null
 
-        val spinnerSize = Dimension(60, 20)
+        val spinnerSize = Dimension(60, 35)
         val spinnerBorder = BorderFactory.createLineBorder(Color(168, 168, 168))
-        val spinnerFont = Font("Dialog", Font.PLAIN, 22)
-        val textFont = Font("Dialog", Font.PLAIN, 24)
+        val spinnerFont = defaultFont.deriveFont(28f)
+        val textFont = defaultFont.deriveFont(32f)
 
         val mainPanel = JPanel().also {
             it.maximumSize = Dimension(9999, 0)
@@ -56,22 +56,27 @@ class NewPeriodScreen : JPanel() {
             it.font = textFont
             it.foreground = textColor
         })
+        mainPanel.add(Box.createHorizontalStrut(5))
         mainPanel.add(hourInput)
+        mainPanel.add(Box.createHorizontalStrut(5))
         mainPanel.add(JLabel("hour(s) and").also {
             it.font = textFont
             it.foreground = textColor
         })
+        mainPanel.add(Box.createHorizontalStrut(5))
         mainPanel.add(minuteInput)
-        mainPanel.add(JLabel("minutes").also {
+        mainPanel.add(Box.createHorizontalStrut(5))
+        mainPanel.add(JLabel("minutes...").also {
             it.font = textFont
             it.foreground = textColor
         })
 
-        JButton("Please").also {
+        JButton("please").also {
             it.font = textFont
-            it.addActionListener { startNewPeriod() }
+            it.preferredSize = Dimension(200, 50)
             it.foreground = textColor
             it.background = buttonBackgroundColor
+            it.addActionListener { startNewPeriod() }
             actionPanel.add(it)
         }
 

@@ -3,6 +3,7 @@ package nl.sajansen.breaktime.gui.screens
 import nl.sajansen.breaktime.buttonBackgroundColor
 import nl.sajansen.breaktime.control.ControlUtils
 import nl.sajansen.breaktime.control.MainControl
+import nl.sajansen.breaktime.defaultFont
 import nl.sajansen.breaktime.textColor
 import org.slf4j.LoggerFactory
 import java.awt.Dimension
@@ -28,7 +29,7 @@ class DuringWorkTimeScreen : JPanel() {
         background = null
 
         val clockFont = Font("Courier", Font.PLAIN, 80)
-        val textFont = Font("Dialog", Font.PLAIN, 16)
+        val textFont = defaultFont.deriveFont(24f)
 
         val clockPanel = JPanel().also {
             it.maximumSize = Dimension(9999, 0)
