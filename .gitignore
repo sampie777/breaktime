@@ -1,0 +1,15 @@
+.idea/
+idea/
+*.iml
+__pycache__
+*.bak
+*.tmp
+target/
+user.properties
+dependency-reduced-pom.xml
+out/
+releases/
+*.xcf
+/*.ews
+.resources/
+docker-compose.yaml
