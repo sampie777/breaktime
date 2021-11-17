@@ -8,6 +8,7 @@ import nl.sajansen.breaktime.gui.screens.DuringWorkTimeScreen
 import nl.sajansen.breaktime.gui.screens.NewPeriodScreen
 import nl.sajansen.breaktime.gui.screens.WaitDuringBreakScreen
 import org.slf4j.LoggerFactory
+import javax.swing.Box
 import javax.swing.BoxLayout
 import javax.swing.JPanel
 
@@ -15,23 +16,36 @@ import javax.swing.JPanel
 class MainFramePanel : JPanel(), GuiEventListener {
     private val logger = LoggerFactory.getLogger(MainFramePanel::class.java.name)
 
+    private val contentPanel = JPanel()
+
     init {
         EventsDispatcher.register(this)
 
+        initGui()
         refreshGui()
     }
 
+    private fun initGui() {
+        contentPanel.layout = BoxLayout(contentPanel, BoxLayout.Y_AXIS)
+
+        layout = BoxLayout(this, BoxLayout.Y_AXIS)
+        add(Box.createVerticalGlue())
+        add(contentPanel)
+        add(Box.createVerticalGlue())
+    }
+
     private fun refreshGui() {
-        border = null
-        layout = BoxLayout(this, BoxLayout.LINE_AXIS)
-        removeAll()
+        contentPanel.removeAll()
+        contentPanel.add(Box.createVerticalGlue())
 
         when (ControlUtils.determineCurrentScreen()) {
-            Screen.BreakTime -> add(WaitDuringBreakScreen())
-            Screen.WorkTime -> add(DuringWorkTimeScreen())
-            else -> add(NewPeriodScreen())
+            Screen.BreakTime -> contentPanel.add(WaitDuringBreakScreen())
+            Screen.WorkTime -> contentPanel.add(DuringWorkTimeScreen())
+            else -> contentPanel.add(NewPeriodScreen())
         }
-        revalidate()
+
+        contentPanel.add(Box.createVerticalGlue())
+        contentPanel.revalidate()
     }
 
     override fun removeNotify() {

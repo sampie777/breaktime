@@ -8,6 +8,7 @@ import nl.sajansen.breaktime.events.GuiEventListener
 import nl.sajansen.breaktime.utils.gui.loadImageResource
 import nl.sajansen.breaktime.utils.gui.setFullscreen
 import org.slf4j.LoggerFactory
+import java.awt.BorderLayout
 import java.util.*
 import javax.swing.JFrame
 import javax.swing.JOptionPane
@@ -45,11 +46,12 @@ class MainFrame : JFrame(), GuiEventListener {
         setSize(695, 450)
         setLocationRelativeTo(null)
 
-        add(MainFramePanel())
+        add(MainFramePanel(), BorderLayout.CENTER)
 
         defaultCloseOperation = EXIT_ON_CLOSE
         iconImage = loadImageResource("images/icon-512.png")
         title = ApplicationInfo.name
+        isUndecorated = true
     }
 
     override fun onStateUpdated() {
