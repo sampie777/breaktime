@@ -1,7 +1,9 @@
 package nl.sajansen.breaktime.gui.screens
 
+import nl.sajansen.breaktime.buttonBackgroundColor
 import nl.sajansen.breaktime.control.ControlUtils
 import nl.sajansen.breaktime.control.MainControl
+import nl.sajansen.breaktime.textColor
 import org.slf4j.LoggerFactory
 import java.awt.Dimension
 import java.awt.Font
@@ -23,29 +25,38 @@ class DuringWorkTimeScreen : JPanel() {
 
     private fun createGui() {
         layout = BoxLayout(this, BoxLayout.Y_AXIS)
+        background = null
 
         val clockFont = Font("Courier", Font.PLAIN, 80)
         val textFont = Font("Dialog", Font.PLAIN, 16)
 
         val clockPanel = JPanel().also {
             it.maximumSize = Dimension(9999, 0)
+            it.background = null
         }
         val actionPanel = JPanel().also {
             it.maximumSize = Dimension(9999, 0)
+            it.background = null
         }
 
         countDownLabel.font = clockFont
+        countDownLabel.foreground = textColor
 
         clockPanel.add(countDownLabel)
 
         JButton("Take a break").also {
             it.addActionListener { MainControl.takeABrake() }
             it.font = textFont
+            it.foreground = textColor
+            it.background = buttonBackgroundColor
             actionPanel.add(it)
         }
 
         add(Box.createVerticalGlue())
-        add(JLabel("Baby I'm working").also { it.font = textFont })
+        add(JLabel("Baby I'm working").also {
+            it.font = textFont
+            it.foreground = textColor
+        })
         add(Box.createVerticalStrut(15))
         add(clockPanel)
         add(Box.createVerticalStrut(70))

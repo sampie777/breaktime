@@ -8,6 +8,7 @@ import nl.sajansen.breaktime.gui.screens.DuringWorkTimeScreen
 import nl.sajansen.breaktime.gui.screens.NewPeriodScreen
 import nl.sajansen.breaktime.gui.screens.WaitDuringBreakScreen
 import org.slf4j.LoggerFactory
+import java.awt.Color
 import javax.swing.Box
 import javax.swing.BoxLayout
 import javax.swing.JPanel
@@ -27,8 +28,11 @@ class MainFramePanel : JPanel(), GuiEventListener {
 
     private fun initGui() {
         contentPanel.layout = BoxLayout(contentPanel, BoxLayout.Y_AXIS)
+        contentPanel.background = Color(60, 60, 60)
 
         layout = BoxLayout(this, BoxLayout.Y_AXIS)
+        background = Color(50, 50, 50)
+
         add(Box.createVerticalGlue())
         add(contentPanel)
         add(Box.createVerticalGlue())
