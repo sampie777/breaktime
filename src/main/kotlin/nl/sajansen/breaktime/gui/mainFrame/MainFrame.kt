@@ -18,6 +18,7 @@ class MainFrame : JFrame(), GuiEventListener {
     private val logger = LoggerFactory.getLogger(MainFrame::class.java.name)
 
     private var autoFocusTimer: Timer? = null
+    var isLocked: Boolean = true
 
     companion object {
         private var instance: MainFrame? = null
@@ -55,15 +56,12 @@ class MainFrame : JFrame(), GuiEventListener {
     }
 
     override fun onStateUpdated() {
-        if (ControlUtils.determineCurrentScreen() == Screen.WorkTime) {
-            lockScreen(false)
-        } else {
-            lockScreen(true)
-        }
+        isLocked = ControlUtils.determineCurrentScreen() != Screen.WorkTime
+        handleLockScreen()
     }
 
-    private fun lockScreen(value: Boolean) {
-        if (!setFullscreen(value)) {
+    private fun handleLockScreen() {
+        if (!setFullscreen(isLocked)) {
             JOptionPane.showMessageDialog(
                 this,
                 "Fullscreen not supported on this graphics device",
@@ -72,13 +70,13 @@ class MainFrame : JFrame(), GuiEventListener {
             )
         }
 
-        isAlwaysOnTop = value
-        defaultCloseOperation = if (value) DO_NOTHING_ON_CLOSE else EXIT_ON_CLOSE
-        extendedState = if (value) NORMAL else ICONIFIED
+        isAlwaysOnTop = isLocked
+        defaultCloseOperation = if (isLocked) DO_NOTHING_ON_CLOSE else EXIT_ON_CLOSE
+        extendedState = if (isLocked) NORMAL else ICONIFIED
 
         autoFocusTimer?.cancel()
         autoFocusTimer?.purge()
-        if (value) {
+        if (isLocked) {
             autoFocusTimer = ControlUtils.setAutoFocusser(this)
         } else {
             setLocationRelativeTo(null)

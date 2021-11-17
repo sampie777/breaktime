@@ -49,7 +49,7 @@ object ControlUtils {
 
     fun setAutoFocusser(frame: Frame): Timer {
         return timer("focusserTimer", daemon = true, initialDelay = 0, period = 200) {
-            frame.requestFocus()
+//            frame.requestFocus()
             frame.extendedState = Frame.NORMAL
         }
     }

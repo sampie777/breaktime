@@ -15,4 +15,10 @@ class MainFrameWindowAdapter(private val frame: MainFrame) : WindowAdapter() {
         super.windowActivated(e)
         EventsDispatcher.currentFrame = frame
     }
+
+    override fun windowLostFocus(p0: WindowEvent?) {
+        if (!frame.isLocked)
+            return
+        frame.requestFocus()
+    }
 }
