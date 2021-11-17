@@ -21,19 +21,19 @@ object ControlUtils {
         return Screen.NewPeriod
     }
 
-    fun getRemainingWorkTime(): Date? {
+    fun getRemainingWorkTime(offset: Int = 700): Date? {
         if (MainControl.workTimeEnd() == null)
             return null
 
-        val remainingTime = MainControl.workTimeEnd()!! - Date().time
+        val remainingTime = MainControl.workTimeEnd()!! - Date().time + offset
         return Date(remainingTime)
     }
 
-    fun getRemainingBreakTime(): Date? {
+    fun getRemainingBreakTime(offset: Int = 700): Date? {
         if (MainControl.breakTimeEnd() == null)
             return null
 
-        val remainingTime = MainControl.breakTimeEnd()!! - Date().time
+        val remainingTime = MainControl.breakTimeEnd()!! - Date().time + offset
         return Date(remainingTime)
     }
 
