@@ -48,7 +48,7 @@ object MainControl {
         isOnBreak = true
         workTimer?.cancel()
         workTimer = null
-        breakTimer = Timer("breakTimer", true).schedule(delay = 5 * 60 * 1000L) {
+        breakTimer = Timer("breakTimer", true).schedule(delay = Settings.lastBreakTimeInSeconds * 1000L) {
             endBreak()
         }
         EventsDispatcher.onStateUpdated()

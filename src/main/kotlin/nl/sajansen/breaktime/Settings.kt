@@ -9,6 +9,10 @@ object Settings {
         get() = prefs.getInt("lastWorkTimeInSeconds", 15 * 60)
         set(value) = prefs.putInt("lastWorkTimeInSeconds", value)
 
+    var lastBreakTimeInSeconds
+        get() = prefs.getInt("lastBreakTimeInSeconds", 5 * 60)
+        set(value) = prefs.putInt("lastBreakTimeInSeconds", value)
+
     fun clearAll() {
         prefs.clear()
     }
