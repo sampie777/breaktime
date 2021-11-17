@@ -1,12 +1,18 @@
 package nl.sajansen.breaktime.gui.mainFrame
 
 import nl.sajansen.breaktime.ApplicationInfo
+import nl.sajansen.breaktime.control.ControlUtils
+import nl.sajansen.breaktime.control.Screen
+import nl.sajansen.breaktime.events.EventsDispatcher
+import nl.sajansen.breaktime.events.GuiEventListener
 import nl.sajansen.breaktime.utils.gui.loadImageResource
+import nl.sajansen.breaktime.utils.gui.setFullscreen
 import org.slf4j.LoggerFactory
 import javax.swing.JFrame
+import javax.swing.JOptionPane
 
 
-class MainFrame : JFrame() {
+class MainFrame : JFrame(), GuiEventListener {
     private val logger = LoggerFactory.getLogger(MainFrame::class.java.name)
 
     companion object {
@@ -25,9 +31,11 @@ class MainFrame : JFrame() {
     init {
         instance = this
 
+        EventsDispatcher.register(this)
         addWindowListener(MainFrameWindowAdapter(this))
 
         initGUI()
+        onStateUpdated()
     }
 
     private fun initGUI() {
@@ -41,6 +49,26 @@ class MainFrame : JFrame() {
         title = ApplicationInfo.name
     }
 
-    fun saveWindowPosition() {
+    override fun onStateUpdated() {
+        if (ControlUtils.determineCurrentScreen() == Screen.WorkTime) {
+            lockScreen(false)
+        } else {
+            lockScreen(true)
+        }
+    }
+
+    private fun lockScreen(value: Boolean) {
+        isAlwaysOnTop = value
+        defaultCloseOperation = if (value) DO_NOTHING_ON_CLOSE else EXIT_ON_CLOSE
+        extendedState = if (value) NORMAL else ICONIFIED
+
+        if (!setFullscreen(value)) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Fullscreen not supported on this graphics device",
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+            )
+        }
     }
 }

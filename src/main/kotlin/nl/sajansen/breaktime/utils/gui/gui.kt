@@ -144,3 +144,23 @@ fun AbstractButton.addHotKey(hotKey: Int?) {
 
     mnemonic = hotKey
 }
+
+fun Window.setFullscreen(value: Boolean): Boolean {
+    val graphicsDevice = this.graphicsConfiguration.device
+
+    if (value) {
+        logger.info("Enabling fullscreen")
+        if (!graphicsDevice.isFullScreenSupported) {
+            logger.error("Fullscreen not supported on this graphics device: $graphicsDevice")
+            return false
+        }
+
+        graphicsDevice.fullScreenWindow = this
+    } else {
+        logger.info("Disabling fullscreen")
+        if (graphicsDevice.fullScreenWindow == this) {
+            graphicsDevice.fullScreenWindow = null
+        }
+    }
+    return true
+}
