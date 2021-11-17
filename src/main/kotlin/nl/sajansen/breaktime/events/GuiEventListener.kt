@@ -5,6 +5,6 @@ import java.awt.Component
 interface GuiEventListener {
     fun refreshNotifications() {}
     fun onConfigSettingsSaved() {}
-    fun onComponentsListUpdated() {}
+    fun onStateUpdated() {}
     fun windowClosing(window: Component?) {}
 }

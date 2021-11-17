@@ -2,6 +2,7 @@ package nl.sajansen.breaktime.events
 
 import org.slf4j.LoggerFactory
 import java.awt.Component
+import java.awt.EventQueue
 import javax.swing.JFrame
 
 object EventsDispatcher : GuiEventListener, DataEventListener {
@@ -27,9 +28,11 @@ object EventsDispatcher : GuiEventListener, DataEventListener {
         }
     }
 
-    override fun onComponentsListUpdated() {
-        guiEventListeners.toTypedArray().forEach {
-            it.onComponentsListUpdated()
+    override fun onStateUpdated() {
+        EventQueue.invokeLater {
+            guiEventListeners.toTypedArray().forEach {
+                it.onStateUpdated()
+            }
         }
     }
 

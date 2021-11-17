@@ -1,5 +1,6 @@
 package nl.sajansen.breaktime
 
+import nl.sajansen.breaktime.control.MainControl
 import nl.sajansen.breaktime.events.EventsDispatcher
 import nl.sajansen.breaktime.gui.mainFrame.MainFrame
 import nl.sajansen.breaktime.utils.getCurrentJarDirectory
@@ -20,7 +21,7 @@ fun main(args: Array<String>) {
         MainFrame.createAndShow()
     }
 
-//    Runner.start()
+    MainControl.init()
 }
 
 fun exitApplication() {
