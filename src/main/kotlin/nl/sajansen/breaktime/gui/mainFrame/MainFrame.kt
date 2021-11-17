@@ -63,6 +63,15 @@ class MainFrame : JFrame(), GuiEventListener {
     }
 
     private fun lockScreen(value: Boolean) {
+        if (!setFullscreen(value)) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Fullscreen not supported on this graphics device",
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+            )
+        }
+
         isAlwaysOnTop = value
         defaultCloseOperation = if (value) DO_NOTHING_ON_CLOSE else EXIT_ON_CLOSE
         extendedState = if (value) NORMAL else ICONIFIED
@@ -71,15 +80,8 @@ class MainFrame : JFrame(), GuiEventListener {
         autoFocusTimer?.purge()
         if (value) {
             autoFocusTimer = ControlUtils.setAutoFocusser(this)
-        }
-
-        if (!setFullscreen(value)) {
-            JOptionPane.showMessageDialog(
-                this,
-                "Fullscreen not supported on this graphics device",
-                "Error",
-                JOptionPane.ERROR_MESSAGE
-            )
+        } else {
+            setLocationRelativeTo(null)
         }
     }
 }

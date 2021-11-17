@@ -1,6 +1,7 @@
 package nl.sajansen.breaktime.gui.screens
 
 import nl.sajansen.breaktime.buttonBackgroundColor
+import nl.sajansen.breaktime.control.ControlUtils
 import nl.sajansen.breaktime.control.MainControl
 import nl.sajansen.breaktime.textColor
 import org.slf4j.LoggerFactory
@@ -38,14 +39,14 @@ class NewPeriodScreen : JPanel() {
         }
 
         hourInput.also {
-            it.model = SpinnerNumberModel(0, 0, 23, 1)
+            it.model = SpinnerNumberModel(ControlUtils.getLastWorkTimeHours(), 0, 23, 1)
             it.preferredSize = spinnerSize
             it.border = spinnerBorder
             it.font = spinnerFont
         }
 
         minuteInput.also {
-            it.model = SpinnerNumberModel(15, 0, 59, 5)
+            it.model = SpinnerNumberModel(ControlUtils.getLastWorkTimeMinutes(), 0, 59, 5)
             it.preferredSize = spinnerSize
             it.border = spinnerBorder
             it.font = spinnerFont

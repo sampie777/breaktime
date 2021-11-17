@@ -1,10 +1,12 @@
 package nl.sajansen.breaktime.control
 
+import nl.sajansen.breaktime.Settings
 import org.slf4j.LoggerFactory
 import java.awt.Frame
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.timer
+import kotlin.math.floor
 
 object ControlUtils {
     private val logger = LoggerFactory.getLogger(this::class.java.name)
@@ -50,6 +52,14 @@ object ControlUtils {
             frame.requestFocus()
             frame.extendedState = Frame.NORMAL
         }
+    }
+
+    fun getLastWorkTimeHours(): Int {
+        return floor(Settings.lastWorkTimeInSeconds / 3600.0).toInt()
+    }
+
+    fun getLastWorkTimeMinutes(): Int {
+        return (floor(Settings.lastWorkTimeInSeconds / 60.0) % 60).toInt()
     }
 }
 

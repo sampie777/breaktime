@@ -1,5 +1,6 @@
 package nl.sajansen.breaktime.control
 
+import nl.sajansen.breaktime.Settings
 import nl.sajansen.breaktime.events.EventsDispatcher
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -33,6 +34,7 @@ object MainControl {
         workTimer = Timer("workTimer", true).schedule(delay = seconds * 1000L) {
             forceBreak()
         }
+        Settings.lastWorkTimeInSeconds = seconds
         EventsDispatcher.onStateUpdated()
     }
 
