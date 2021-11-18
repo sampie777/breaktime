@@ -1,5 +1,6 @@
 package nl.sajansen.breaktime.control
 
+import nl.sajansen.breaktime.ApplicationInfo
 import nl.sajansen.breaktime.Settings
 import nl.sajansen.breaktime.exitApplication
 import org.slf4j.LoggerFactory
@@ -37,9 +38,10 @@ class TerminalControl(private val onClose: () -> Unit) {
             "help" -> print(
                 """
               Available commands: 
-                help    Show this message
-                exit    Close this popup
-                quit    Quit application
+                help                    Show this message
+                exit                    Close this popup
+                quit                    Quit application
+                version                 Show application version and info
                 get worktime            Returns last work time value
                 set worktime <value>    Set this to the value specified (number)
                 get breaktime           Returns last break time value
@@ -50,6 +52,7 @@ class TerminalControl(private val onClose: () -> Unit) {
             )
             "exit" -> onClose()
             "quit" -> exitApplication()
+            "version" -> print("${ApplicationInfo.name} - ${ApplicationInfo.version} (${ApplicationInfo.artifactId}) by ${ApplicationInfo.author}")
             "get worktime" -> print(Settings.lastWorkTimeInSeconds.toString())
             "get breaktime" -> print(Settings.lastBreakTimeInSeconds.toString())
             "get minimize" -> print(Settings.minimizeWorkTimeScreen.toString())
