@@ -15,18 +15,19 @@ class TerminalControl(private val onClose: () -> Unit) {
     var historySearchOffset = 0
 
     fun onKeyPressed(e: KeyEvent) {
-        if (e.keyCode in 44..93 || e.keyCode == 32) {
+        if (e.keyCode in 44..111 || e.keyCode == KeyEvent.VK_SPACE
+            || e.keyCode in 151..153 || e.keyCode in 160..222 || e.keyCode in 512..523) {
             command += e.keyChar
             return
         }
 
         when (e.keyCode) {
-            10 -> executeAction()
-            8 -> command = command.dropLast(1)
-            38 -> if (history.size > historySearchOffset) {
+            KeyEvent.VK_ENTER -> executeAction()
+            KeyEvent.VK_BACK_SPACE -> command = command.dropLast(1)
+            KeyEvent.VK_UP -> if (history.size > historySearchOffset) {
                 command = history[history.size - (++historySearchOffset)]
             }
-            40 -> if (historySearchOffset > 0) {
+            KeyEvent.VK_DOWN -> if (historySearchOffset > 0) {
                 command = if (historySearchOffset == 1) "" else history[history.size - (--historySearchOffset)]
             }
             else -> logger.info("Unknown key code: " + e.keyCode.toString())
