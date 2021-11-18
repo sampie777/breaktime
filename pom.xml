@@ -18,6 +18,7 @@
         <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
         <logback.version>1.2.1</logback.version>
         <kotlin.version>1.5.31</kotlin.version>
+        <launch4j.version>1.7.25</launch4j.version>
     </properties>
 
     <repositories>
@@ -143,6 +144,65 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <!-- Launch4J .exe build -->
+                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                <artifactId>launch4j-maven-plugin</artifactId>
+                <version>${launch4j.version}</version>
+                <executions>
+                    <execution>
+                        <id>l4j-gui</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>launch4j</goal>
+                        </goals>
+                        <configuration>
+                            <headerType>gui</headerType>
+                            <dontWrapJar>false</dontWrapJar>
+                            <outfile>target/${project.artifactId}-${project.version}.exe</outfile>
+                            <jar>target/${project.artifactId}-${project.version}.jar</jar>
+                            <errTitle/>
+                            <cmdLine/>
+                            <chdir/>
+                            <priority>normal</priority>
+                            <downloadUrl></downloadUrl>
+                            <supportUrl/>
+                            <stayAlive>false</stayAlive>
+                            <restartOnCrash>false</restartOnCrash>
+                            <manifest/>
+                            <icon/>
+                            <jre>
+                                <path/>
+                                <bundledJre64Bit>false</bundledJre64Bit>
+                                <bundledJreAsFallback>false</bundledJreAsFallback>
+                                <minVersion>1.8.0</minVersion>
+                                <maxVersion/>
+                                <jdkPreference>preferJre</jdkPreference>
+                                <runtimeBits>64/32</runtimeBits>
+                                <initialHeapSize>256</initialHeapSize>
+                                <maxHeapSize>800</maxHeapSize>
+                            </jre>
+                            <versionInfo>
+                                <!--suppress UnresolvedMavenProperty -->
+                                <fileVersion>${project.baseVersion}.0</fileVersion>
+                                <txtFileVersion>-</txtFileVersion>
+                                <fileDescription>${project.name}</fileDescription>
+                                <copyright>${author}</copyright>
+                                <!--suppress UnresolvedMavenProperty -->
+                                <productVersion>${project.baseVersion}.0</productVersion>
+                                <txtProductVersion>-</txtProductVersion>
+                                <productName>${project.name}</productName>
+                                <companyName>SAJansen</companyName>
+                                <internalName>${project.artifactId}</internalName>
+                                <originalFilename>${project.artifactId}.exe</originalFilename>
+                                <trademarks/>
+                                <language>ENGLISH_US</language>
+                            </versionInfo>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
