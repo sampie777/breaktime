@@ -30,7 +30,6 @@ class TerminalControl(private val onClose: () -> Unit) {
             KeyEvent.VK_DOWN -> if (historySearchOffset > 0) {
                 command = if (historySearchOffset == 1) "" else history[history.size - (--historySearchOffset)]
             }
-            else -> logger.info("Unknown key code: " + e.keyCode.toString())
         }
     }
 
