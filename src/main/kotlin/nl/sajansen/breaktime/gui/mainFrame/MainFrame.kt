@@ -1,6 +1,7 @@
 package nl.sajansen.breaktime.gui.mainFrame
 
 import nl.sajansen.breaktime.ApplicationInfo
+import nl.sajansen.breaktime.Settings
 import nl.sajansen.breaktime.control.ControlUtils
 import nl.sajansen.breaktime.control.Screen
 import nl.sajansen.breaktime.events.EventsDispatcher
@@ -72,7 +73,7 @@ class MainFrame : JFrame(), GuiEventListener {
 
         isAlwaysOnTop = isLocked
         defaultCloseOperation = if (isLocked) DO_NOTHING_ON_CLOSE else EXIT_ON_CLOSE
-        extendedState = if (isLocked) NORMAL else ICONIFIED
+        minimize(!isLocked && Settings.minimizeWorkTimeScreen)
 
         autoFocusTimer?.cancel()
         autoFocusTimer?.purge()
@@ -81,5 +82,9 @@ class MainFrame : JFrame(), GuiEventListener {
         } else {
             setLocationRelativeTo(null)
         }
+    }
+
+    fun minimize(setMinimized: Boolean) {
+        extendedState = if (setMinimized) ICONIFIED else NORMAL
     }
 }

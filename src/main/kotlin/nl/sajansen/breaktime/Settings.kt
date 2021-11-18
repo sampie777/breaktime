@@ -13,6 +13,10 @@ object Settings {
         get() = prefs.getInt("lastBreakTimeInSeconds", 5 * 60)
         set(value) = prefs.putInt("lastBreakTimeInSeconds", value)
 
+    var minimizeWorkTimeScreen
+        get() = prefs.getBoolean("minimizeWorkTimeScreen", false)
+        set(value) = prefs.putBoolean("minimizeWorkTimeScreen", value)
+
     fun clearAll() {
         prefs.clear()
     }

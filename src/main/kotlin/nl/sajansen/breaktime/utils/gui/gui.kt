@@ -67,6 +67,10 @@ fun getNumericFontHeight(fontMetrics: FontMetrics): Double {
     return fontMetrics.height - fontMetrics.height * 0.33
 }
 
+fun getMainFrameComponent(): JFrame? {
+    return MainFrame.getInstance()
+}
+
 fun getMainFrameComponent(childComponent: Component): JFrame? {
     return MainFrame.getInstance()
 }
