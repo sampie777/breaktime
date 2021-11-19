@@ -1,7 +1,9 @@
 package nl.sajansen.breaktime.control
 
+import nl.sajansen.breaktime.Settings
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class TerminalControlTest {
     @Test
@@ -23,5 +25,31 @@ class TerminalControlTest {
         val terminal = TerminalControl {}
         terminal.handleCommand("")
         assertEquals("> ", terminal.terminalText)
+    }
+
+    @Test
+    fun `test execute help command`() {
+        val terminal = TerminalControl {}
+        terminal.handleCommand("help")
+        assertTrue(terminal.terminalText.contains("Available commands"))
+    }
+
+    @Test
+    fun `test get break time`() {
+        val terminal = TerminalControl {}
+        Settings.lastBreakTimeInSeconds = 100
+
+        terminal.handleCommand("get breaktime")
+        assertEquals("> 100\n", terminal.terminalText)
+    }
+
+    @Test
+    fun `test set break time`() {
+        val terminal = TerminalControl {}
+        Settings.lastBreakTimeInSeconds = 100
+
+        terminal.handleCommand("set breaktime 200")
+        assertEquals("> Done.\n", terminal.terminalText)
+        assertEquals(200, Settings.lastBreakTimeInSeconds)
     }
 }

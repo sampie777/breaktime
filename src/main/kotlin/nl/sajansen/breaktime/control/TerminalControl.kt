@@ -43,11 +43,13 @@ class TerminalControl(private val onClose: () -> Unit) {
                 quit                    Quit application
                 version                 Show application version and info
                 get worktime            Returns last work time value
-                set worktime <value>    Set this to the value specified (number)
+                set worktime <value>    Set this to the value specified (number:seconds)
                 get breaktime           Returns last break time value
-                set breaktime <value>   Set this to the value specified (number)
+                set breaktime <value>   Set this to the value specified (number:seconds)
                 get minimize            Returns last break time value
                 set minimize <value>    Set this to the value specified (true|false)
+                log file                Get time log file name
+                log clear               Clear time log
             """.trimIndent()
             )
             "exit" -> onClose()
@@ -56,6 +58,11 @@ class TerminalControl(private val onClose: () -> Unit) {
             "get worktime" -> print(Settings.lastWorkTimeInSeconds.toString())
             "get breaktime" -> print(Settings.lastBreakTimeInSeconds.toString())
             "get minimize" -> print(Settings.minimizeWorkTimeScreen.toString())
+            "log file" -> print(EventLogger.fileName)
+            "log clear" -> {
+                EventLogger.clearAll()
+                print("Deleted log file")
+            }
             "" -> {
             }
             else -> {

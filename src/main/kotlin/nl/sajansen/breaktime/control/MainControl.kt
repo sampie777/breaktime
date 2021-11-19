@@ -36,6 +36,7 @@ object MainControl {
         }
         Settings.lastWorkTimeInSeconds = seconds
         EventsDispatcher.onStateUpdated()
+        EventLogger.logWorkTimeStarted()
     }
 
     fun forceBreak() {
@@ -52,6 +53,7 @@ object MainControl {
             endBreak()
         }
         EventsDispatcher.onStateUpdated()
+        EventLogger.logWorkTimeEnded()
     }
 
     fun endBreak() {

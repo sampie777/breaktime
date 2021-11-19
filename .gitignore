@@ -13,3 +13,4 @@ releases/
 /*.ews
 .resources/
 docker-compose.yaml
+breaktime.csv

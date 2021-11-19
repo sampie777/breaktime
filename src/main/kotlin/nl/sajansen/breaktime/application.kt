@@ -1,5 +1,6 @@
 package nl.sajansen.breaktime
 
+import nl.sajansen.breaktime.control.EventLogger
 import nl.sajansen.breaktime.control.MainControl
 import nl.sajansen.breaktime.events.EventsDispatcher
 import nl.sajansen.breaktime.gui.mainFrame.MainFrame
@@ -22,10 +23,19 @@ fun main(args: Array<String>) {
     }
 
     MainControl.init()
+    EventLogger.logApplicationStarted()
 }
 
 fun exitApplication() {
     logger.info("Shutting down application")
+
+
+    try {
+        EventLogger.logApplicationStopped()
+    } catch (t: Throwable) {
+        logger.error("Failed to write log")
+        t.printStackTrace()
+    }
 
     try {
         logger.info("Closing windows...")
