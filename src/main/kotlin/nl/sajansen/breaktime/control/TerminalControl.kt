@@ -44,6 +44,8 @@ class TerminalControl(private val onClose: () -> Unit) {
                 exit                    Close this popup
                 quit                    Quit application
                 version                 Show application version and info
+                log file                Get time log file name
+                log clear               Clear time log
                 get worktime            Returns last work time value
                 set worktime <seconds>  Set this to the value specified
                 get breaktime           Returns last break time value
@@ -52,8 +54,14 @@ class TerminalControl(private val onClose: () -> Unit) {
                 set afterHoursStartTime <hours>:<minutes>   Set this to the value specified
                 get minimize            Returns last break time value
                 set minimize <true|false>    Set this to the value specified
-                log file                Get time log file name
-                log clear               Clear time log
+                get penaltyemail name   The name in the email for this penalty
+                set penaltyemail name <value>
+                get penaltyemail to     The email for the penalty to be sent to
+                set penaltyemail to <value>
+                get penaltyemail IFTTT event
+                set penaltyemail IFTTT event <value>
+                get IFTTT webhookkey
+                set IFTTT webhookkey <value>
             """.trimIndent()
             )
             "exit" -> onClose()
@@ -63,6 +71,10 @@ class TerminalControl(private val onClose: () -> Unit) {
             "get breaktime" -> print(Settings.lastBreakTimeInSeconds.toString())
             "get afterHoursStartTime" -> print(ControlUtils.dateToString(Date(Settings.afterHoursStartTimeInSeconds * 1000L), "H:mm") + " (${Settings.afterHoursStartTimeInSeconds})")
             "get minimize" -> print(Settings.minimizeWorkTimeScreen.toString())
+            "get penaltyemail name" -> print(Settings.penaltyEmailUserName)
+            "get penaltyemail to" -> print(Settings.penaltyEmailToEmail)
+            "get penaltyemail IFTTT event" -> print(Settings.iftttWebHookEmailPenaltyEvent)
+            "get IFTTT webhookkey" -> print(Settings.iftttWebHookKey)
             "log file" -> print(EventLogger.fileName)
             "log clear" -> {
                 EventLogger.clearAll()
@@ -125,6 +137,35 @@ class TerminalControl(private val onClose: () -> Unit) {
                     val match = it.find(command) ?: return@also
                     val value = match.groupValues[1]
                     Settings.minimizeWorkTimeScreen = value == "true"
+                    return print("Done.")
+                }
+
+                "getpenalty email name (.*)".toRegex().also {
+                    val match = it.find(command) ?: return@also
+                    var value = match.groupValues[1].trim()
+                    value = if (value == "") "Someone" else value
+                    Settings.penaltyEmailUserName = value
+                    return print("Done.")
+                }
+
+                "getpenalty email to (.*)".toRegex().also {
+                    val match = it.find(command) ?: return@also
+                    val value = match.groupValues[1].trim()
+                    Settings.penaltyEmailToEmail = value
+                    return print("Done.")
+                }
+
+                "getpenalty email IFTTT event (.*)".toRegex().also {
+                    val match = it.find(command) ?: return@also
+                    val value = match.groupValues[1].trim()
+                    Settings.iftttWebHookEmailPenaltyEvent = value
+                    return print("Done.")
+                }
+
+                "get IFTTT webhookkey (.*)".toRegex().also {
+                    val match = it.find(command) ?: return@also
+                    val value = match.groupValues[1].trim()
+                    Settings.iftttWebHookKey = value
                     return print("Done.")
                 }
 
