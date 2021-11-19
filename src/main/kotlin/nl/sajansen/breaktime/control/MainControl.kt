@@ -6,7 +6,7 @@ import nl.sajansen.breaktime.events.EventsDispatcher
 import org.slf4j.LoggerFactory
 import java.util.*
 import kotlin.concurrent.schedule
-import kotlin.math.max
+import kotlin.math.min
 
 object MainControl {
     private val logger = LoggerFactory.getLogger(this::class.java.name)
@@ -31,7 +31,7 @@ object MainControl {
     fun startNewPeriod(hours: Int, minutes: Int) = startNewPeriod(hours * 3600 + minutes * 60)
 
     fun startNewPeriod(seconds: Int) {
-        val useSeconds = if (ControlUtils.isAfterHours()) max(seconds, Settings.maxWorkTimeAfterHoursInSeconds) else seconds
+        val useSeconds = if (ControlUtils.isAfterHours()) min(seconds, Settings.maxWorkTimeAfterHoursInSeconds) else seconds
 
         isOnBreak = false
         workTimer = Timer("workTimer", true).schedule(delay = useSeconds * 1000L) {
