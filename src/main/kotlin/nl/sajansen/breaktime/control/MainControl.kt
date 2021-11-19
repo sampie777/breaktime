@@ -31,13 +31,13 @@ object MainControl {
     fun startNewPeriod(hours: Int, minutes: Int) = startNewPeriod(hours * 3600 + minutes * 60)
 
     fun startNewPeriod(seconds: Int) {
+        Settings.lastWorkTimeInSeconds = seconds
         val useSeconds = if (ControlUtils.isAfterHours()) min(seconds, Settings.maxWorkTimeAfterHoursInSeconds) else seconds
 
         isOnBreak = false
         workTimer = Timer("workTimer", true).schedule(delay = useSeconds * 1000L) {
             forceBreak()
         }
-        Settings.lastWorkTimeInSeconds = useSeconds
         EventsDispatcher.onStateUpdated()
         EventLogger.logWorkTimeStarted()
     }
