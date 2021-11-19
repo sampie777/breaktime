@@ -80,8 +80,8 @@ class MainFrame : JFrame(), GuiEventListener {
         if (isLocked) {
             autoFocusTimer = ControlUtils.setAutoFocusser(this)
         } else {
-            setLocationRelativeTo(null)
             setSize(695, 450)
+            setLocationRelativeTo(null)
         }
     }
 
