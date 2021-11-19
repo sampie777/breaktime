@@ -12,7 +12,7 @@ import kotlin.system.exitProcess
 
 private val logger = LoggerFactory.getLogger("application")
 
-fun main(args: Array<String>) {
+fun main() {
     ApplicationRuntimeSettings.testing = false
 
     logger.info("Starting application ${ApplicationInfo.artifactId}:${ApplicationInfo.version}")

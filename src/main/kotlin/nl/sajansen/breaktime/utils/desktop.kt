@@ -22,7 +22,7 @@ fun copyString(string: String) {
     clipboard.setContents(stringSelection, stringSelection)
 }
 
-fun pasteText(string: String, sendPasteDelayMs: Int = 100) {
+fun pasteText(sendPasteDelayMs: Int = 100) {
     logger.info("Pasting text from clipboard")
     val robot = Robot()
     robot.delay(sendPasteDelayMs)

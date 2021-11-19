@@ -71,10 +71,6 @@ fun getMainFrameComponent(): JFrame? {
     return MainFrame.getInstance()
 }
 
-fun getMainFrameComponent(childComponent: Component): JFrame? {
-    return MainFrame.getInstance()
-}
-
 fun loadImageResource(iconPath: String): Image? {
     val resource: URL? = ApplicationInfo::class.java.getResource(iconPath)
     if (resource == null) {
