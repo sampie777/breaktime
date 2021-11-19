@@ -33,7 +33,7 @@ class TerminalControl(private val onClose: () -> Unit) {
         }
     }
 
-    private fun handleCommand(command: String) {
+    fun handleCommand(command: String) {
         when (command) {
             "help" -> print(
                 """
@@ -110,7 +110,7 @@ class TerminalControl(private val onClose: () -> Unit) {
         command = ""
     }
 
-    private fun print(text: String, end: String = "\n") {
+    fun print(text: String, end: String = "\n") {
         terminalText += text + end
     }
 }
