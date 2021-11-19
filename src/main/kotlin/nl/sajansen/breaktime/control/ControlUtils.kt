@@ -61,6 +61,13 @@ object ControlUtils {
     fun getLastWorkTimeMinutes(): Int {
         return (floor(Settings.lastWorkTimeInSeconds / 60.0) % 60).toInt()
     }
+
+    fun isAfterHours(): Boolean {
+        val now = Calendar.getInstance()
+        return now.get(Calendar.HOUR_OF_DAY) * 3600 +
+                now.get(Calendar.MINUTE) * 60 +
+                now.get(Calendar.SECOND) > Settings.afterHoursStartTimeInSeconds
+    }
 }
 
 enum class Screen {

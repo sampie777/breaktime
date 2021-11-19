@@ -52,4 +52,34 @@ class TerminalControlTest {
         assertEquals("> Done.\n", terminal.terminalText)
         assertEquals(200, Settings.lastBreakTimeInSeconds)
     }
+
+    @Test
+    fun `test get after hours start time`() {
+        val terminal = TerminalControl {}
+        // 21:15
+        Settings.afterHoursStartTimeInSeconds = 21 * 3600 + 15 * 60
+
+        terminal.handleCommand("get afterHoursStartTime")
+        assertEquals("> 21:15 (${Settings.afterHoursStartTimeInSeconds})\n", terminal.terminalText)
+    }
+
+    @Test
+    fun `test set after hours start time`() {
+        val terminal = TerminalControl {}
+        Settings.afterHoursStartTimeInSeconds = 0
+
+        terminal.handleCommand("set afterHoursStartTime 21:15")
+        assertEquals("> Done.\n", terminal.terminalText)
+        assertEquals(21 * 3600 + 15 * 60, Settings.afterHoursStartTimeInSeconds)
+    }
+
+    @Test
+    fun `test set after hours start time with overflow`() {
+        val terminal = TerminalControl {}
+        Settings.afterHoursStartTimeInSeconds = 0
+
+        terminal.handleCommand("set afterHoursStartTime 40:90")
+        assertEquals("> Done.\n", terminal.terminalText)
+        assertEquals((16 + 1) * 3600 + 30 * 60, Settings.afterHoursStartTimeInSeconds)
+    }
 }

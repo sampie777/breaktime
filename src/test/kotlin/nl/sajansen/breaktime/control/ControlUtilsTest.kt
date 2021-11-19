@@ -4,6 +4,8 @@ import nl.sajansen.breaktime.Settings
 import org.junit.After
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class ControlUtilsTest {
     @After
@@ -60,5 +62,15 @@ class ControlUtilsTest {
 
         Settings.lastWorkTimeInSeconds = 2 * 3600 + 60
         assertEquals(ControlUtils.getLastWorkTimeMinutes(), 1)
+    }
+
+    @Test
+    fun `test get if is after hours`() {
+        // 23:59:59
+        Settings.afterHoursStartTimeInSeconds = 23 * 60 * 60 + 59 * 60 + 59
+        assertFalse(ControlUtils.isAfterHours())
+
+        Settings.afterHoursStartTimeInSeconds = 0
+        assertTrue(ControlUtils.isAfterHours())
     }
 }

@@ -5,6 +5,7 @@ import nl.sajansen.breaktime.Settings
 import nl.sajansen.breaktime.exitApplication
 import org.slf4j.LoggerFactory
 import java.awt.event.KeyEvent
+import java.util.*
 
 class TerminalControl(private val onClose: () -> Unit) {
     private val logger = LoggerFactory.getLogger(this::class.java.name)
@@ -16,7 +17,8 @@ class TerminalControl(private val onClose: () -> Unit) {
 
     fun onKeyPressed(e: KeyEvent) {
         if (e.keyCode in 44..111 || e.keyCode == KeyEvent.VK_SPACE
-            || e.keyCode in 151..153 || e.keyCode in 160..222 || e.keyCode in 512..523) {
+            || e.keyCode in 151..153 || e.keyCode in 160..222 || e.keyCode in 512..523
+        ) {
             command += e.keyChar
             return
         }
@@ -43,11 +45,13 @@ class TerminalControl(private val onClose: () -> Unit) {
                 quit                    Quit application
                 version                 Show application version and info
                 get worktime            Returns last work time value
-                set worktime <value>    Set this to the value specified (number:seconds)
+                set worktime <seconds>  Set this to the value specified
                 get breaktime           Returns last break time value
-                set breaktime <value>   Set this to the value specified (number:seconds)
+                set breaktime <seconds> Set this to the value specified
+                get afterHoursStartTime Returns time when after hours starts
+                set afterHoursStartTime <hours>:<minutes>   Set this to the value specified
                 get minimize            Returns last break time value
-                set minimize <value>    Set this to the value specified (true|false)
+                set minimize <true|false>    Set this to the value specified
                 log file                Get time log file name
                 log clear               Clear time log
             """.trimIndent()
@@ -57,6 +61,7 @@ class TerminalControl(private val onClose: () -> Unit) {
             "version" -> print("${ApplicationInfo.name} - ${ApplicationInfo.version} (${ApplicationInfo.artifactId}) by ${ApplicationInfo.author}")
             "get worktime" -> print(Settings.lastWorkTimeInSeconds.toString())
             "get breaktime" -> print(Settings.lastBreakTimeInSeconds.toString())
+            "get afterHoursStartTime" -> print(ControlUtils.dateToString(Date(Settings.afterHoursStartTimeInSeconds * 1000L), "H:mm") + " (${Settings.afterHoursStartTimeInSeconds})")
             "get minimize" -> print(Settings.minimizeWorkTimeScreen.toString())
             "log file" -> print(EventLogger.fileName)
             "log clear" -> {
@@ -93,6 +98,26 @@ class TerminalControl(private val onClose: () -> Unit) {
                     }
 
                     Settings.lastBreakTimeInSeconds = value
+                    return print("Done.")
+                }
+
+                "set afterHoursStartTime (\\d+):(\\d+)".toRegex().also {
+                    val match = it.find(command) ?: return@also
+                    val hours = match.groupValues[1].toIntOrNull()
+                    val minutes = match.groupValues[2].toIntOrNull()
+
+                    if (hours == null) {
+                        return print("Could not convert value to int: $minutes")
+                    }
+                    if (minutes == null) {
+                        return print("Could not convert value to int: $minutes")
+                    }
+
+                    var totalSeconds = hours * 3600 + minutes * 60
+                    // Handle overflow
+                    totalSeconds %= (24 * 3600)
+
+                    Settings.afterHoursStartTimeInSeconds = totalSeconds
                     return print("Done.")
                 }
 
