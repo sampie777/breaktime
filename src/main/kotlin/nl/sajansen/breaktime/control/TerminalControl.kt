@@ -58,8 +58,8 @@ class TerminalControl(private val onClose: () -> Unit) {
                 set penaltyemail name <value>
                 get penaltyemail to     The email for the penalty to be sent to
                 set penaltyemail to <value>
-                get penaltyemail IFTTT event
-                set penaltyemail IFTTT event <value>
+                get penaltyemail event  The IFTTT event name for this penalty
+                set penaltyemail event <value>
                 get IFTTT webhookkey
                 set IFTTT webhookkey <value>
             """.trimIndent()
@@ -73,7 +73,7 @@ class TerminalControl(private val onClose: () -> Unit) {
             "get minimize" -> print(Settings.minimizeWorkTimeScreen.toString())
             "get penaltyemail name" -> print(Settings.penaltyEmailUserName)
             "get penaltyemail to" -> print(Settings.penaltyEmailToEmail)
-            "get penaltyemail IFTTT event" -> print(Settings.iftttWebHookEmailPenaltyEvent)
+            "get penaltyemail event" -> print(Settings.iftttWebHookEmailPenaltyEvent)
             "get IFTTT webhookkey" -> print(Settings.iftttWebHookKey)
             "log file" -> print(EventLogger.fileName)
             "log clear" -> {
@@ -140,7 +140,7 @@ class TerminalControl(private val onClose: () -> Unit) {
                     return print("Done.")
                 }
 
-                "getpenalty email name (.*)".toRegex().also {
+                "set penaltyemail name (.*)".toRegex().also {
                     val match = it.find(command) ?: return@also
                     var value = match.groupValues[1].trim()
                     value = if (value == "") "Someone" else value
@@ -148,21 +148,21 @@ class TerminalControl(private val onClose: () -> Unit) {
                     return print("Done.")
                 }
 
-                "getpenalty email to (.*)".toRegex().also {
+                "set penaltyemail to (.*)".toRegex().also {
                     val match = it.find(command) ?: return@also
                     val value = match.groupValues[1].trim()
                     Settings.penaltyEmailToEmail = value
                     return print("Done.")
                 }
 
-                "getpenalty email IFTTT event (.*)".toRegex().also {
+                "set penaltyemail event (.*)".toRegex().also {
                     val match = it.find(command) ?: return@also
                     val value = match.groupValues[1].trim()
                     Settings.iftttWebHookEmailPenaltyEvent = value
                     return print("Done.")
                 }
 
-                "get IFTTT webhookkey (.*)".toRegex().also {
+                "set IFTTT webhookkey (.*)".toRegex().also {
                     val match = it.find(command) ?: return@also
                     val value = match.groupValues[1].trim()
                     Settings.iftttWebHookKey = value

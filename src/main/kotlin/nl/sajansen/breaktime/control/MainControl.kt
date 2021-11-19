@@ -1,6 +1,7 @@
 package nl.sajansen.breaktime.control
 
 import nl.sajansen.breaktime.Settings
+import nl.sajansen.breaktime.control.penalties.EmailPenalty
 import nl.sajansen.breaktime.events.EventsDispatcher
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -30,8 +31,6 @@ object MainControl {
     fun startNewPeriod(hours: Int, minutes: Int) = startNewPeriod(hours * 3600 + minutes * 60)
 
     fun startNewPeriod(seconds: Int) {
-        logger.info("Start new period")
-
         val useSeconds = if (ControlUtils.isAfterHours()) max(seconds, Settings.maxWorkTimeAfterHoursInSeconds) else seconds
 
         isOnBreak = false
@@ -44,12 +43,10 @@ object MainControl {
     }
 
     fun forceBreak() {
-        logger.info("Ending work period")
         takeABrake()
     }
 
     fun takeABrake() {
-        logger.info("Taking a break")
         isOnBreak = true
         workTimer?.cancel()
         workTimer = null
@@ -60,8 +57,18 @@ object MainControl {
         EventLogger.logWorkTimeEnded()
     }
 
+    fun skipBreak(): Boolean {
+        val penalty = EmailPenalty()
+        if (!penalty.execute()) {
+            logger.error("Cannot skip break: penalty not completed")
+            return false
+        }
+
+        endBreak()
+        return true
+    }
+
     fun endBreak() {
-        logger.info("Break ended")
         isOnBreak = false
         breakTimer?.cancel()
         breakTimer = null

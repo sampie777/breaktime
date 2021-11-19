@@ -15,6 +15,8 @@ class WaitDuringBreakScreen : JPanel() {
 
     private val timer: Timer
     private val countDownLabel = JLabel("")
+    private val skipButton = JButton("Skip")
+    private var skipClickCount = 0
 
     init {
         createGui()
@@ -45,12 +47,13 @@ class WaitDuringBreakScreen : JPanel() {
 
         clockPanel.add(countDownLabel)
 
-        JButton("Skip").also {
+        skipButton.also {
+            it.toolTipText = "Take a penalty to skip this break"
             it.font = textFont
-            it.preferredSize = Dimension(200, 50)
+            it.preferredSize = Dimension(300, 50)
             it.foreground = textColor
             it.background = buttonBackgroundColor
-            it.addActionListener { MainControl.endBreak() }
+            it.addActionListener { skipBreak() }
             actionPanel.add(it)
         }
 
@@ -69,5 +72,18 @@ class WaitDuringBreakScreen : JPanel() {
     private fun timerStep() {
         val time = ControlUtils.getRemainingBreakTime()
         countDownLabel.text = ControlUtils.dateToString(time)
+    }
+
+    private fun skipBreak() {
+        if (MainControl.skipBreak()) {
+            return
+        }
+
+        skipButton.text = "Penalty failed"
+        skipButton.toolTipText = "Is the penalty set up correctly?"
+
+        if (skipClickCount++ > 10) {
+            MainControl.endBreak()
+        }
     }
 }
