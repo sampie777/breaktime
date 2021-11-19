@@ -3,7 +3,9 @@ package nl.sajansen.breaktime.control
 import nl.sajansen.breaktime.ApplicationInfo
 import nl.sajansen.breaktime.Settings
 import nl.sajansen.breaktime.exitApplication
+import nl.sajansen.breaktime.utils.getCopiedText
 import org.slf4j.LoggerFactory
+import java.awt.event.ActionEvent
 import java.awt.event.KeyEvent
 import java.util.*
 
@@ -16,6 +18,11 @@ class TerminalControl(private val onClose: () -> Unit) {
     var historySearchOffset = 0
 
     fun onKeyPressed(e: KeyEvent) {
+        if (e.keyCode == KeyEvent.VK_V && e.modifiers.and(ActionEvent.CTRL_MASK) != 0) {
+            command += getCopiedText()
+            return
+        }
+
         if (e.keyCode in 44..111 || e.keyCode == KeyEvent.VK_SPACE
             || e.keyCode in 151..153 || e.keyCode in 160..222 || e.keyCode in 512..523
         ) {

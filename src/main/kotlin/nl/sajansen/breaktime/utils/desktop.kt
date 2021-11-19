@@ -7,6 +7,7 @@ import java.awt.Rectangle
 import java.awt.Robot
 import java.awt.Toolkit
 import java.awt.datatransfer.Clipboard
+import java.awt.datatransfer.DataFlavor
 import java.awt.datatransfer.StringSelection
 import java.awt.event.InputEvent
 import java.awt.event.KeyEvent
@@ -20,6 +21,11 @@ fun copyString(string: String) {
     val stringSelection = StringSelection(string)
     val clipboard: Clipboard = Toolkit.getDefaultToolkit().systemClipboard
     clipboard.setContents(stringSelection, stringSelection)
+}
+
+fun getCopiedText(): String {
+    val clipboard: Clipboard = Toolkit.getDefaultToolkit().systemClipboard
+    return clipboard.getData(DataFlavor.stringFlavor) as String
 }
 
 fun pasteText(sendPasteDelayMs: Int = 100) {
