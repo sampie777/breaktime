@@ -8,6 +8,7 @@ import nl.sajansen.breaktime.textColor
 import org.slf4j.LoggerFactory
 import java.awt.Color
 import java.awt.Dimension
+import java.lang.Integer.max
 import javax.swing.*
 
 class NewPeriodScreen : JPanel() {
@@ -88,8 +89,8 @@ class NewPeriodScreen : JPanel() {
     }
 
     private fun startNewPeriod() {
-        val hours = hourInput.value as Int
-        val minutes = minuteInput.value as Int
+        val hours = max(0, hourInput.value as Int)
+        val minutes = max(0, minuteInput.value as Int)
 
         if (hours == 0 && minutes == 0) {
             return

@@ -25,7 +25,7 @@ object ControlUtils {
         if (MainControl.workTimeEnd() == null)
             return null
 
-        val remainingTime = MainControl.workTimeEnd()!! - Date().time + offset
+        val remainingTime = MainControl.workTimeEnd()!!.time - Date().time + offset
         return Date(remainingTime)
     }
 
@@ -33,7 +33,7 @@ object ControlUtils {
         if (MainControl.breakTimeEnd() == null)
             return null
 
-        val remainingTime = MainControl.breakTimeEnd()!! - Date().time + offset
+        val remainingTime = MainControl.breakTimeEnd()!!.time - Date().time + offset
         return Date(remainingTime)
     }
 

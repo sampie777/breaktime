@@ -1,5 +1,6 @@
 package nl.sajansen.breaktime.control
 
+import nl.sajansen.breaktime.ApplicationRuntimeSettings
 import nl.sajansen.breaktime.Settings
 import nl.sajansen.breaktime.control.penalties.EmailPenalty
 import nl.sajansen.breaktime.events.EventsDispatcher
@@ -11,33 +12,52 @@ import kotlin.math.min
 object MainControl {
     private val logger = LoggerFactory.getLogger(this::class.java.name)
 
-    private var isOnBreak = false
-    private var workTimer: TimerTask? = null
-    private var breakTimer: TimerTask? = null
+    var workTimeEnd: Date? = null
+    var breakTimeEnd: Date? = null
+    private var timer: TimerTask? = null
 
-    fun init() {}
+    fun init() {
+        if (ApplicationRuntimeSettings.testing) {
+            return
+        }
 
-    fun isOnBreak(): Boolean {
-        return isOnBreak
+        timer = Timer("mainTimer", true)
+            .schedule(period = 1000L, delay = 0L) { checkTimers() }
+    }
+
+    fun checkTimers() {
+        if (workTimeEnd != null && Date().after(workTimeEnd)) {
+            forceBreak()
+        }
+        if (breakTimeEnd != null && Date().after(breakTimeEnd)) {
+            endBreak()
+        }
     }
 
     fun isWorking(): Boolean {
-        return workTimer != null
+        return workTimeEnd != null
     }
 
-    fun workTimeEnd() = workTimer?.scheduledExecutionTime()
-    fun breakTimeEnd() = breakTimer?.scheduledExecutionTime()
+    fun isOnBreak(): Boolean {
+        return breakTimeEnd != null
+    }
+
+    fun workTimeEnd() = workTimeEnd
+    fun breakTimeEnd() = breakTimeEnd
 
     fun startNewPeriod(hours: Int, minutes: Int) = startNewPeriod(hours * 3600 + minutes * 60)
 
     fun startNewPeriod(seconds: Int) {
+        if (seconds < 0) {
+            return logger.error("Can't start period with negative time")
+        }
+
         Settings.lastWorkTimeInSeconds = seconds
         val useSeconds = if (ControlUtils.isAfterHours()) min(seconds, Settings.maxWorkTimeAfterHoursInSeconds) else seconds
 
-        isOnBreak = false
-        workTimer = Timer("workTimer", true).schedule(delay = useSeconds * 1000L) {
-            forceBreak()
-        }
+        breakTimeEnd = null
+        workTimeEnd = Date(Date().time + useSeconds * 1000L)
+
         EventsDispatcher.onStateUpdated()
         EventLogger.logWorkTimeStarted()
     }
@@ -47,12 +67,8 @@ object MainControl {
     }
 
     fun takeABrake() {
-        isOnBreak = true
-        workTimer?.cancel()
-        workTimer = null
-        breakTimer = Timer("breakTimer", true).schedule(delay = Settings.lastBreakTimeInSeconds * 1000L) {
-            endBreak()
-        }
+        workTimeEnd = null
+        breakTimeEnd = Date(Date().time + Settings.lastBreakTimeInSeconds * 1000L)
         EventsDispatcher.onStateUpdated()
         EventLogger.logWorkTimeEnded()
     }
@@ -69,9 +85,7 @@ object MainControl {
     }
 
     fun endBreak() {
-        isOnBreak = false
-        breakTimer?.cancel()
-        breakTimer = null
+        breakTimeEnd = null
         EventsDispatcher.onStateUpdated()
     }
 }
