@@ -7,6 +7,7 @@ import nl.sajansen.breaktime.events.EventsDispatcher
 import org.slf4j.LoggerFactory
 import java.util.*
 import kotlin.concurrent.schedule
+import kotlin.math.max
 import kotlin.math.min
 
 object MainControl {
@@ -14,6 +15,7 @@ object MainControl {
 
     var workTimeEnd: Date? = null
     var breakTimeEnd: Date? = null
+    private var workTimeLeft: Int = 0
     private var timer: TimerTask? = null
 
     fun init() {
@@ -44,18 +46,22 @@ object MainControl {
 
     fun workTimeEnd() = workTimeEnd
     fun breakTimeEnd() = breakTimeEnd
+    fun hasWorkTimeLeft() = workTimeLeft > 0
 
-    fun startNewPeriod(hours: Int, minutes: Int) = startNewPeriod(hours * 3600 + minutes * 60)
+    fun startNewPeriod(hours: Int, minutes: Int, rememberValue: Boolean = true) = startNewPeriod(hours * 3600 + minutes * 60, rememberValue)
 
-    fun startNewPeriod(seconds: Int) {
+    fun startNewPeriod(seconds: Int, rememberValue: Boolean = true) {
         if (seconds < 0) {
             return logger.error("Can't start period with negative time")
         }
 
-        Settings.lastWorkTimeInSeconds = seconds
+        if (rememberValue) {
+            Settings.lastWorkTimeInSeconds = seconds
+        }
         val useSeconds = if (ControlUtils.isAfterHours()) min(seconds, Settings.maxWorkTimeAfterHoursInSeconds) else seconds
 
         breakTimeEnd = null
+        workTimeLeft = 0
         workTimeEnd = Date(Date().time + useSeconds * 1000L)
 
         EventsDispatcher.onStateUpdated()
@@ -72,8 +78,10 @@ object MainControl {
     }
 
     fun startBreak() {
+        workTimeLeft = if (workTimeEnd == null) 0 else max(0, (workTimeEnd!!.time - Date().time) / 1000).toInt()
         workTimeEnd = null
         breakTimeEnd = Date(Date().time + Settings.lastBreakTimeInSeconds * 1000L)
+
         EventsDispatcher.onStateUpdated()
         EventLogger.logWorkTimeEnded()
     }
@@ -94,5 +102,14 @@ object MainControl {
     fun endBreak() {
         breakTimeEnd = null
         EventsDispatcher.onStateUpdated()
+    }
+
+    fun continueWork() {
+        if (workTimeLeft <= 0) {
+            return
+        }
+
+        startNewPeriod(workTimeLeft, rememberValue = false)
+        EventLogger.log(EventLogger.Event.WorkContinued)
     }
 }

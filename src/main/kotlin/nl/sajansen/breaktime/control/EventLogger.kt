@@ -18,6 +18,7 @@ object EventLogger {
         ApplicationStopped,
         BreakSkipped,
         BreakPenaltyFailed,
+        WorkContinued,
     }
 
     fun logWorkTimeStarted() = log(Event.WorkTimeStarted)
@@ -32,7 +33,7 @@ object EventLogger {
         File(fileName).delete()
     }
 
-    private fun log(action: Event) = log(action.toString())
+    fun log(action: Event) = log(action.toString())
 
     private fun log(action: String) {
         try {
