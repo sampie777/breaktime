@@ -63,10 +63,15 @@ object MainControl {
     }
 
     fun forceBreak() {
-        takeABrake()
+        startBreak()
     }
 
     fun takeABrake() {
+        startBreak()
+        EventLogger.logTookABreak()
+    }
+
+    fun startBreak() {
         workTimeEnd = null
         breakTimeEnd = Date(Date().time + Settings.lastBreakTimeInSeconds * 1000L)
         EventsDispatcher.onStateUpdated()
@@ -77,10 +82,12 @@ object MainControl {
         val penalty = EmailPenalty()
         if (!penalty.execute()) {
             logger.error("Cannot skip break: penalty not completed")
+            EventLogger.logBreakPenaltyFailed()
             return false
         }
 
         endBreak()
+        EventLogger.logBreakSkipped()
         return true
     }
 

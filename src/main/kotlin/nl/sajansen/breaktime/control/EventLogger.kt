@@ -10,25 +10,29 @@ object EventLogger {
 
     var fileName = "${ApplicationInfo.name}.csv"
 
-    fun logWorkTimeStarted() {
-        log("WorkTimeStarted")
+    enum class Event {
+        WorkTimeStarted,
+        WorkTimeEnded,
+        TookABreak,
+        ApplicationStarted,
+        ApplicationStopped,
+        BreakSkipped,
+        BreakPenaltyFailed,
     }
 
-    fun logWorkTimeEnded() {
-        log("WorkTimeEnded")
-    }
-
-    fun logApplicationStarted() {
-        log("ApplicationStarted")
-    }
-
-    fun logApplicationStopped() {
-        log("ApplicationStopped")
-    }
+    fun logWorkTimeStarted() = log(Event.WorkTimeStarted)
+    fun logWorkTimeEnded() = log(Event.WorkTimeEnded)
+    fun logApplicationStarted() = log(Event.ApplicationStarted)
+    fun logApplicationStopped() = log(Event.ApplicationStopped)
+    fun logTookABreak() = log(Event.TookABreak)
+    fun logBreakSkipped() = log(Event.BreakSkipped)
+    fun logBreakPenaltyFailed() = log(Event.BreakPenaltyFailed)
 
     fun clearAll() {
         File(fileName).delete()
     }
+
+    private fun log(action: Event) = log(action.toString())
 
     private fun log(action: String) {
         try {
