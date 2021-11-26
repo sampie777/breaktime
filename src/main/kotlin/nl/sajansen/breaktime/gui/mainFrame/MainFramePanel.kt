@@ -4,6 +4,7 @@ import nl.sajansen.breaktime.control.ControlUtils
 import nl.sajansen.breaktime.control.Screen
 import nl.sajansen.breaktime.events.EventsDispatcher
 import nl.sajansen.breaktime.events.GuiEventListener
+import nl.sajansen.breaktime.gui.TopBar
 import nl.sajansen.breaktime.gui.screens.DuringWorkTimeScreen
 import nl.sajansen.breaktime.gui.screens.NewPeriodScreen
 import nl.sajansen.breaktime.gui.screens.WaitDuringBreakScreen

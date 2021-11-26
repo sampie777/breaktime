@@ -37,13 +37,13 @@ object ControlUtils {
         return Date(remainingTime)
     }
 
-    fun dateToString(date: Date?, format: String = "H:mm:ss"): String {
+    fun dateToString(date: Date?, format: String = "H:mm:ss", localTimeZone: Boolean = false): String {
         if (date == null) {
             return ""
         }
 
         val dateFormat = SimpleDateFormat(format)
-        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+        dateFormat.timeZone = if (localTimeZone) TimeZone.getDefault() else TimeZone.getTimeZone("UTC")
         return dateFormat.format(date)
     }
 

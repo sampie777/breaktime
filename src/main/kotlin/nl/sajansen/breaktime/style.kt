@@ -8,4 +8,5 @@ private val streamRobotoLight = ApplicationInfo::class.java.getResourceAsStream(
 val defaultFont: Font = Font.createFont(Font.TRUETYPE_FONT, streamRobotoLight)
 
 val textColor = Color(230, 230, 230)
+val textColorLight = Color(230, 230, 230, 200)
 val buttonBackgroundColor = Color(80, 80, 80)
