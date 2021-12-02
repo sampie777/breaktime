@@ -6,7 +6,7 @@
 
     <artifactId>breaktime</artifactId>
     <groupId>nl.sajansen</groupId>
-    <version>0.3.1-SNAPSHOT</version>
+    <version>0.3.1</version>
     <packaging>jar</packaging>
 
     <name>breaktime</name>
