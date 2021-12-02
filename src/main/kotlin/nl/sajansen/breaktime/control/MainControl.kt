@@ -78,9 +78,11 @@ object MainControl {
     }
 
     fun startBreak() {
+        val breakTimeStart = (workTimeEnd ?: Date()).time
+        breakTimeEnd = Date(breakTimeStart + Settings.lastBreakTimeInSeconds * 1000L)
+
         workTimeLeft = if (workTimeEnd == null) 0 else max(0, (workTimeEnd!!.time - Date().time) / 1000).toInt()
         workTimeEnd = null
-        breakTimeEnd = Date(Date().time + Settings.lastBreakTimeInSeconds * 1000L)
 
         EventsDispatcher.onStateUpdated()
         EventLogger.logWorkTimeEnded()
