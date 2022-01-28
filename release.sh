@@ -50,6 +50,7 @@ function pushAndRelease {
   git push -u origin master --tags || exit 1
 
   mvn install || exit 1
+  chmod +x target/breaktime-${RELEASE_VERSION}.jar
 }
 
 function setNextDevelopmentVersion {
