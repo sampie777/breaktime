@@ -18,6 +18,7 @@ class WaitDuringBreakScreen : JPanel() {
     private val skipButton = JButton("Skip")
     private val continueButton = JButton("Continue")
     private var skipClickCount = 0
+    private var startTime = -1L
 
     init {
         createGui()
@@ -55,6 +56,7 @@ class WaitDuringBreakScreen : JPanel() {
             it.foreground = textColor
             it.background = buttonBackgroundColor
             it.addActionListener { skipBreak() }
+            it.isFocusable = false
             actionPanel.add(it)
         }
 
@@ -87,9 +89,31 @@ class WaitDuringBreakScreen : JPanel() {
         countDownLabel.text = ControlUtils.dateToString(time)
 
         continueButton.isVisible = MainControl.hasWorkTimeLeft()
+
+        if (time == null) {
+            skipButton.isVisible = true
+            return
+        }
+
+        if (startTime < 0) {
+            startTime = time.time
+        }
+        // Wait a second before showing the button
+        skipButton.isVisible = startTime - time.time > 1000
     }
 
     private fun skipBreak() {
+        skipClickCount++
+
+        if (skipClickCount <= 1) {
+            skipButton.text = "Are you sure?"
+            return
+        }
+        if (skipClickCount == 2) {
+            skipButton.text = "Really?"
+            return
+        }
+
         if (MainControl.skipBreak()) {
             return
         }
@@ -97,7 +121,7 @@ class WaitDuringBreakScreen : JPanel() {
         skipButton.text = "Penalty failed"
         skipButton.toolTipText = "Is the penalty set up correctly?"
 
-        if (skipClickCount++ > 10) {
+        if (skipClickCount > 10) {
             MainControl.endBreak()
         }
     }
